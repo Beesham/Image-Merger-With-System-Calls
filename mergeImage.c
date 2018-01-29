@@ -16,6 +16,22 @@ int sizeOfDimension(int fd, char stopChar) {
     return c;    
 }
 
+void mergeFiles(int fd1, int fd2, int outFd, int w1, int h1, int w2, int h2) {
+
+    char w1buf[w1];
+    
+    lseek(fd1, 0, SEEK_SET);
+
+    int i;
+    int bytesRead = 0;
+    do {
+        i = read(fd1, &w1buf, sizeof(w1buf));
+        bytesRead = bytesRead + i;
+        if(write(outFd, w1buf, sizeof(w1buf)) == -1) write(STDOUT_FILENO, "Error has occured", 18);
+    }while(i != 0);
+    printf("%d %d", bytesRead, w1*h1);
+}
+
 int main(int argc, char *argv[]) {
 
     int inFileFd1, inFileFd2, outFileFd;    //file descripters
@@ -79,6 +95,14 @@ int main(int argc, char *argv[]) {
 
         if(atoi(widthOfInFile1) < atoi(widthOfInFile2) || atoi(heightOfInFile1) < atoi(heightOfInFile2)) {
             write(STDOUT_FILENO, errMsg2, sizeof(errMsg2)); 
+        }else{
+            mergeFiles(inFileFd1, 
+                inFileFd2,
+                outFileFd,
+                atoi(widthOfInFile1), 
+                atoi(heightOfInFile1), 
+                atoi(widthOfInFile2), 
+                atoi(heightOfInFile2)); 
         }
         
         close(inFileFd1);

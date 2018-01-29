@@ -19,6 +19,7 @@ int sizeOfDimension(int fd, char stopChar) {
 void mergeFiles(int fd1, int fd2, int outFd, int w1, int h1, int w2, int h2) {
 
     char w1buf[w1];
+    char w2buf[w2*3];
     
     lseek(fd1, 0, SEEK_SET);
 
@@ -30,12 +31,25 @@ void mergeFiles(int fd1, int fd2, int outFd, int w1, int h1, int w2, int h2) {
         if(write(outFd, w1buf, sizeof(w1buf)) == -1) write(STDOUT_FILENO, "Error has occured", 18);
     }while(i != 0);
     printf("%d %d", bytesRead, w1*h1);
+
+    bytesRead = 0;
+    int edge = w1 - w2;
+    lseek(outFd, 0, SEEK_SET);
+     do {
+        lseek(outFd, edge*3, SEEK_CUR);
+        i = read(fd2, &w2buf, sizeof(w2buf));
+        bytesRead = bytesRead + i;
+        if(write(outFd, w2buf, sizeof(w2buf)) == -1) write(STDOUT_FILENO, "Error has occured", 18);
+    }while(i != 0);
+
 }
 
 int main(int argc, char *argv[]) {
 
     int inFileFd1, inFileFd2, outFileFd;    //file descripters
     char *inFile1, *inFile2, *outFile;
+    
+
     char buf[7];
     char errMsg[] = "Error: Something wrong with your file";
     char errMsg2[] = "Error: File 1 is smaller than File 2!";

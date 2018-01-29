@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
     char *inFile1, *inFile2, *outFile;
     char buf[7];
     char errMsg[] = "Error: Something wrong with your file";
-    char widthOfInFile1[256], widthOfInFile2, heightOfInFile1[256], heightOfInFile2;
+    char widthOfInFile1[256], widthOfInFile2[256], heightOfInFile1[256], heightOfInFile2[256];
 
     //Opens files from provideed by command line args
     for(int i = optind; i < argc; i++) {
@@ -35,6 +35,7 @@ int main(int argc, char *argv[]) {
     else {
            
         lseek(inFileFd1, 3, SEEK_SET); //set the seek to the line with dimensions
+        lseek(inFileFd2, 3, SEEK_SET); //set the seek to the line with dimensions
 
         int c = sizeOfDimension(inFileFd1, ' ');
 
@@ -54,7 +55,26 @@ int main(int argc, char *argv[]) {
         printf("%d", bytesRead);
         printf("%s", heightOfInFile1);
      
+        //Reads dimenasions for seconf file
+        c = sizeOfDimension(inFileFd2, ' ');
+
+        //Reads the width
+        lseek(inFileFd2, 3, SEEK_SET); //set the seek to the line with dimensions
+        bytesRead = read(inFileFd2, &widthOfInFile2, c);  //reads the width 
+
+        printf("%d", bytesRead);
+        printf("%s", widthOfInFile2);
+ 
+        i = sizeOfDimension(inFileFd2, '\n');
+
+        //Reads the height
+        lseek(inFileFd2, c+3, SEEK_SET); //set the seek to the line with dimensions
+        bytesRead = read(inFileFd2, &heightOfInFile2, i);  //reads the width 
+
+        printf("%d", bytesRead);
+        printf("%s", heightOfInFile2);
      
+
         
         close(inFileFd1);
         close(inFileFd2);

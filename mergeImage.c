@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <getopt.h>
+#include <stdlib.h>
 
 int sizeOfDimension(int fd, char stopChar) {
     //Cound the amount of charaters in width 
@@ -21,6 +22,7 @@ int main(int argc, char *argv[]) {
     char *inFile1, *inFile2, *outFile;
     char buf[7];
     char errMsg[] = "Error: Something wrong with your file";
+    char errMsg2[] = "Error: File 1 is smaller than File 2!";
     char widthOfInFile1[256], widthOfInFile2[256], heightOfInFile1[256], heightOfInFile2[256];
 
     //Opens files from provideed by command line args
@@ -75,6 +77,9 @@ int main(int argc, char *argv[]) {
         printf("%s", heightOfInFile2);
      
 
+        if(atoi(widthOfInFile1) < atoi(widthOfInFile2) || atoi(heightOfInFile1) < atoi(heightOfInFile2)) {
+            write(STDOUT_FILENO, errMsg2, sizeof(errMsg2)); 
+        }
         
         close(inFileFd1);
         close(inFileFd2);

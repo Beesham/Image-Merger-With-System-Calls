@@ -71,9 +71,6 @@ int main(int argc, char *argv[]) {
         lseek(inFileFd1, 3, SEEK_SET); //set the seek to the line with dimensions
         int bytesRead = read(inFileFd1, &widthOfInFile1, sizeOfWidth);  //reads the width 
 
-        printf("%d", bytesRead);
-        printf("%s", widthOfInFile1);
- 
         //Reads the height of first file
         lseek(inFileFd1, sizeOfWidth+3, SEEK_SET); //set the seek to the line with dimensions
         bytesRead = read(inFileFd1, &heightOfInFile1, sizeOfHeight);  //reads the height 
@@ -85,9 +82,6 @@ int main(int argc, char *argv[]) {
         lseek(inFileFd2, 3, SEEK_SET); 
         bytesRead = read(inFileFd2, &widthOfInFile2, sizeOfWidth);  
 
-        printf("%d", bytesRead);
-        printf("%s", widthOfInFile2);
- 
         sizeOfHeight = sizeOfDimension(inFileFd2, '\n');
 
         //Reads the height of the second file
